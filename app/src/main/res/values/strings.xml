@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">XadesAndroidTest</string>
+    <string name="certificate_is_not_selected">Certificate is not selected</string>
+    <string name="choose_certificate_pkcs12">Choose certificate pkcs12</string>
+    <string name="document_is_not_selected">Document is not selected</string>
+    <string name="choose_document_xml">Choose document XML</string>
+    <string name="type_password">Type password</string>
+    <string name="sign_document">Sign document</string>
+    <string name="the_password_has_not_been_entered">The password has not been entered</string>
+    <string name="signing_status">Signing status</string>
+    <string name="certificate_selected">Certificate selected!</string>
+    <string name="password_entered">Password entered!</string>
+    <string name="document_selected">Document selected!</string>
+</resources>

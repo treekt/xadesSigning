@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp">
+
+        <Button
+            android:id="@+id/chooseDocumentButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_document_xml"
+            android:onClick="onChooseDocument"/>
+
+        <TextView
+            android:id="@+id/chooseDocumentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/document_is_not_selected"
+            android:layout_marginBottom="30dp"/>
+
+        <Button
+            android:id="@+id/chooseCertificateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_certificate_pkcs12"
+            tools:layout_editor_absoluteX="81dp"
+            tools:layout_editor_absoluteY="186dp"
+            android:onClick="onChooseCertificate"/>
+
+        <TextView
+            android:id="@+id/chooseCertificateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/certificate_is_not_selected"
+            android:textAlignment="center"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="246dp" />
+
+        <TextView
+            android:id="@+id/typePasswordTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/the_password_has_not_been_entered"
+            android:textAlignment="center"
+            tools:layout_editor_absoluteX="112dp"
+            tools:layout_editor_absoluteY="246dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginVertical="30dp">
+
+            <Button
+                android:id="@+id/signDocumentButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_document"
+                android:onClick="signDocumentOnClick"/>
+
+            <TextView
+                android:id="@+id/signingStatusTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/signing_status"
+                android:textAlignment="center"
+                tools:layout_editor_absoluteX="112dp"
+                tools:layout_editor_absoluteY="246dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
