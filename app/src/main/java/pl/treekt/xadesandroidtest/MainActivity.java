@@ -1,11 +1,13 @@
-package treekt.pl.xadesandroidtest;
+package pl.treekt.xadesandroidtest;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.TextView;
@@ -20,10 +22,14 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.util.List;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,6 +42,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import treekt.pl.xadesandroidtest.R;
 import xades4j.XAdES4jException;
 import xades4j.algorithms.GenericAlgorithm;
 import xades4j.production.DataObjectReference;
@@ -56,14 +63,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int READ_REQUEST_CODE_DOC = 42;
     private static final int READ_REQUEST_CODE_CERT = 41;
-    private static String documentPath;
-    private static String certificatePath;
+    private String documentPath;
+    private String certificatePath;
     private static String certificatePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     public void onChooseDocument(View view) {
@@ -77,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signDocumentOnClick(View view) {
-        try{
+        try {
             XadesSigner signer = getSigner(certificatePath, certificatePassword);
             signWithoutIDEnveloped(documentPath, this.getFilesDir().toString() + "/signedDocument.xml", signer);
             TextView signingStatusTextView = findViewById(R.id.signingStatusTextView);
             signingStatusTextView.setText("Document has been signed and save in " + this.getFilesDir().toString() + "/signedDocument.xml");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -115,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     path = PathUtil.getPath(this, uri);
                     Toast.makeText(getApplicationContext(), path, Toast.LENGTH_SHORT).show();
-                    if(requestCode == READ_REQUEST_CODE_DOC){
+                    if (requestCode == READ_REQUEST_CODE_DOC) {
                         documentPath = path;
                         TextView chooseDocumentTextView = findViewById(R.id.chooseDocumentTextView);
                         chooseDocumentTextView.setText(R.string.document_selected);
-                    }else{
+                    } else {
                         certificatePath = path;
                         TextView chooseDocumentTextView = findViewById(R.id.chooseCertificateTextView);
                         chooseDocumentTextView.setText(R.string.certificate_selected);
@@ -132,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                         certificatePassword = input.toString();
                                         TextView typePasswordTextView = findViewById(R.id.typePasswordTextView);
                                         typePasswordTextView.setText(R.string.password_entered);
+                                        Toast.makeText(getApplicationContext(), getCertificateInfo(certificatePath, certificatePassword), Toast.LENGTH_SHORT).show();
                                     }
                                 }).show();
                     }
@@ -180,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
      * @throws UnexpectedJCAException
      */
     private static KeyingDataProvider getKeyingDataProvider(String pfxPath, String password) throws KeyStoreException, SigningCertChainException, UnexpectedJCAException {
-
         KeyingDataProvider keyingProvider = new FileSystemKeyStoreKeyingDataProvider(
                 "pkcs12",
                 pfxPath,
@@ -291,4 +299,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private String getCertificateInfo(String path, String password) {
+        try {
+            KeyStore p12 = KeyStore.getInstance("pkcs12");
+            p12.load(new FileInputStream(path), password.toCharArray());
+            Enumeration e = p12.aliases();
+            while (e.hasMoreElements()) {
+                String alias = (String) e.nextElement();
+                X509Certificate c = (X509Certificate) p12.getCertificate(alias);
+                Principal subject = c.getSubjectDN();
+                System.out.println(subject.toString());
+                String subjectArray[] = subject.toString().split(",");
+                for (String s : subjectArray) {
+                    String[] str = s.trim().split("=");
+                    String key = str[0];
+                    String value = str[1];
+                    System.out.println(key + " - " + value);
+                }
+                return subject.toString() + " (" + password + ")";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

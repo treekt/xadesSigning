@@ -1,4 +1,4 @@
-package treekt.pl.xadesandroidtest;
+package pl.treekt.xadesandroidtest;
 
 import xades4j.providers.impl.KeyStoreKeyingDataProvider;
 

@@ -1,4 +1,4 @@
-package treekt.pl.xadesandroidtest;
+package pl.treekt.xadesandroidtest;
 
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
